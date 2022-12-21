@@ -102,7 +102,7 @@ class random_dummy_player:
 
         while len(moves) > 0:  # cant pop() when len(moves) = 0
             random_move = moves.pop()
-            is_valid, is_win, new_state = gomoku.move(new_state, random_move)  # random move in state S
+            is_valid, is_win, new_state = gomoku.move(new_state, random_move) 
 
             if is_win:
                 return self.result_of_game(new_state[1], self.black) # 1 or -1
