@@ -95,22 +95,24 @@ class random_dummy_player:
     def rollout(self, node) -> float:
         if check_win(node.state[0], node.last_move) or len(node.v_moves) == 0:
             return self.result_of_game(node.state[1], self.black)
+
         moves = copy.deepcopy(node.v_moves)
-        random.shuffle(moves)
         new_state = copy.deepcopy(node.state)
+        random.shuffle(moves)
+
         while len(moves) > 0:  # cant pop() when len(moves) = 0
             random_move = moves.pop()
             is_valid, is_win, new_state = gomoku.move(new_state, random_move)  # random move in state S
 
-        if check_win(new_state[0], node.last_move):
-            return self.result_of_game(new_state[1], self.black)
-        elif len(moves) == 0:
-            return 0
+            if is_win:
+                return self.result_of_game(new_state[1], self.black) # 1, -1 or 0
+
+        return 0 # no more moves and no win = draw = 0
 
     def backup(self, value: float, node) -> None:
         while node is not None:
             node.N += 1
-            node.Q += value
+            node.Q += value # ++ will be +, +- will be -
             node = node.parent
 
     def move(self, state: GameState, last_move: Move, max_time_to_move: int = 1000) -> Move:
