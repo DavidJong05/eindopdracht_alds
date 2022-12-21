@@ -59,21 +59,19 @@ class random_dummy_player:
         """
         self.black = black_
 
-    def result_of_game(self, ply, player):
+    def result_of_game(self, ply: int, player: int) -> int:
         if player: # black = 1 = true
             if ply % 2 == 0:
                 return 1
             elif ply % 2 == 1:
                 return -1
-            else:
-                return 0
+
         if player == False: # white = 2 = false
             if ply % 2 == 1:
                 return 1
             elif ply % 2 == 0:
                 return -1
-            else:
-                return 0
+
 
     def expand(self, node: tree_node) -> tree_node:
         if check_win(node.state[0], node.last_move) or len(node.v_moves) == 0:
@@ -92,9 +90,11 @@ class random_dummy_player:
 
         return self.expand(node.highest_uct())
 
-    def rollout(self, node) -> float:
-        if check_win(node.state[0], node.last_move) or len(node.v_moves) == 0:
+    def rollout(self, node: tree_node) -> int:
+        if check_win(node.state[0], node.last_move): # check if win
             return self.result_of_game(node.state[1], self.black)
+        if len(node.v_moves) == 0: # if no win and full board its draw
+            return 0
 
         moves = copy.deepcopy(node.v_moves)
         new_state = copy.deepcopy(node.state)
@@ -109,7 +109,7 @@ class random_dummy_player:
 
         return 0 # no more moves and no win = draw = 0
 
-    def backup(self, value: float, node) -> None:
+    def backup(self, value: float, node: tree_node) -> None:
         while node is not None:
             node.N += 1
             node.Q += value # ++ will be +, +- will be -
