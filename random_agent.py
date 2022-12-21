@@ -105,7 +105,7 @@ class random_dummy_player:
             is_valid, is_win, new_state = gomoku.move(new_state, random_move)  # random move in state S
 
             if is_win:
-                return self.result_of_game(new_state[1], self.black) # 1, -1 or 0
+                return self.result_of_game(new_state[1], self.black) # 1 or -1
 
         return 0 # no more moves and no win = draw = 0
 
